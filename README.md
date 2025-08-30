@@ -7,6 +7,11 @@ npm run develop
 ```
 
 ## ⚙️ Registering the custom plugin
+First, we need to build the custom plugin. Navigate to the plugin directory and run:
+```cd src/plugins/custom-badge-field
+npm install
+npm run build
+```
 
 To register the plugin, you need to add it to the `./config/plugins.ts` file of your Strapi project:
 ```
