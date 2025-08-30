@@ -1,61 +1,35 @@
 # 🚀 Getting started with Strapi
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
-
 ### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
 
 ```
 npm run develop
-# or
-yarn develop
 ```
 
-### `start`
+## ⚙️ Registering the custom plugin
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
+To register the plugin, you need to add it to the `./config/plugins.ts` file of your Strapi project:
 ```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
+'custom-badge-field': {
+    enabled: true,
+    resolve: './src/plugins/custom-badge-field'
+},
 ```
 
-## ⚙️ Deployment
+### 🛠️ How to add the custom field to a content type
+1. Go to the Content-Types Builder in the Strapi admin panel.
+2. Select the content type you want to add the custom field to or create a new one.
+3. Click on the "Add New Field" button.
+4. In the field type selection modal, click on the "Custom" tab.
+5. Select the "Badge Color" field from the list of custom fields.
+6. Configure the field settings as needed (e.g., name).
+7. Click on the "Finish" button to add the field to your content type.
+8. Save the content type to apply the changes.
+9. Now you can use the "Badge Color" custom field in your content type to select a color badge.
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## 🧪 Testing the relationship validation article - tags
+1. Go to the "Articles" section in the Strapi admin panel and try to create a new article.
+2. Attempt to save the article with less than 2 tags selected.
+3. You should see a validation error message indicating that at least 2 tags are required.
+4. Now, select 2 or more tags and save the article again. You should be able to save the article successfully this time.
+5. This confirms that the relationship validation for a minimum of 2 tags is working correctly.
