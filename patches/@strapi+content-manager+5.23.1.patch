@@ -1,0 +1,273 @@
+diff --git a/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.js b/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.js
+index e3b76fc..f2bb297 100644
+--- a/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.js
++++ b/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.js
+@@ -11,20 +11,20 @@ var hooks = require('../modules/hooks.js');
+ var translations = require('../utils/translations.js');
+ 
+ function _interopNamespaceDefault(e) {
+-  var n = Object.create(null);
+-  if (e) {
+-    Object.keys(e).forEach(function (k) {
+-      if (k !== 'default') {
+-        var d = Object.getOwnPropertyDescriptor(e, k);
+-        Object.defineProperty(n, k, d.get ? d : {
+-          enumerable: true,
+-          get: function () { return e[k]; }
++    var n = Object.create(null);
++    if (e) {
++        Object.keys(e).forEach(function (k) {
++            if (k !== 'default') {
++                var d = Object.getOwnPropertyDescriptor(e, k);
++                Object.defineProperty(n, k, d.get ? d : {
++                    enumerable: true,
++                    get: function () { return e[k]; }
++                });
++            }
+         });
+-      }
+-    });
+-  }
+-  n.default = e;
+-  return Object.freeze(n);
++    }
++    n.default = e;
++    return Object.freeze(n);
+ }
+ 
+ var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
+@@ -43,42 +43,42 @@ const LeftMenu = ()=>{
+         sensitivity: 'base'
+     });
+     const menu = React__namespace.useMemo(()=>[
+-            {
+-                id: 'collectionTypes',
+-                title: formatMessage({
+-                    id: translations.getTranslation('components.LeftMenu.collection-types'),
+-                    defaultMessage: 'Collection Types'
+-                }),
+-                searchable: true,
+-                links: collectionTypeLinks
+-            },
+-            {
+-                id: 'singleTypes',
++        {
++            id: 'collectionTypes',
++            title: formatMessage({
++                id: translations.getTranslation('components.LeftMenu.collection-types'),
++                defaultMessage: 'Collection Types'
++            }),
++            searchable: true,
++            links: collectionTypeLinks
++        },
++        {
++            id: 'singleTypes',
++            title: formatMessage({
++                id: translations.getTranslation('components.LeftMenu.single-types'),
++                defaultMessage: 'Single Types'
++            }),
++            searchable: true,
++            links: singleTypeLinks
++        }
++    ].map((section)=>({
++        ...section,
++        links: section.links/**
++         * Filter by the search value
++         */ .filter((link)=>startsWith(link.title, search.trim()))/**
++         * Sort correctly using the language
++         */ .sort((a, b)=>formatter.compare(a.title, b.title))/**
++         * Apply the formated strings to the links from react-intl
++         */ .map((link)=>{
++            return {
++                ...link,
+                 title: formatMessage({
+-                    id: translations.getTranslation('components.LeftMenu.single-types'),
+-                    defaultMessage: 'Single Types'
+-                }),
+-                searchable: true,
+-                links: singleTypeLinks
+-            }
+-        ].map((section)=>({
+-                ...section,
+-                links: section.links/**
+-           * Filter by the search value
+-           */ .filter((link)=>startsWith(link.title, search.trim()))/**
+-           * Sort correctly using the language
+-           */ .sort((a, b)=>formatter.compare(a.title, b.title))/**
+-           * Apply the formated strings to the links from react-intl
+-           */ .map((link)=>{
+-                    return {
+-                        ...link,
+-                        title: formatMessage({
+-                            id: link.title,
+-                            defaultMessage: link.title
+-                        })
+-                    };
++                    id: link.title,
++                    defaultMessage: link.title
+                 })
+-            })), [
++            };
++        })
++    })), [
+         collectionTypeLinks,
+         search,
+         singleTypeLinks,
+@@ -165,6 +165,33 @@ const LeftMenu = ()=>{
+                         })
+                     }, section.id);
+                 })
++            }),
++            /*#__PURE__*/ jsxRuntime.jsx(designSystem.Divider, {
++                background: "neutral150"
++            }),
++            /*#__PURE__*/ jsxRuntime.jsx(designSystem.Button, {
++                variant: "tertiary",
++                size: "S",
++                fullWidth: true,
++                style: {
++                    borderRadius: 0,
++                    border: 'none'
++                },
++                onClick: ()=>{
++                    const menuElement = document.getElementById(':rk:');
++                    if (menuElement) {
++                        const liElements = menuElement.getElementsByTagName('li');
++                        const isAnyVisible = Array.from(liElements).some((li)=>li.style.display !== 'none');
++                        for(let i = 0; i < liElements.length; i++){
++                            const li = liElements[i];
++                            li.style.display = isAnyVisible ? 'none' : 'block';
++                        }
++                    }
++                },
++                children: formatMessage({
++                    id: translations.getTranslation('components.LeftMenu.toggle-collection-types'),
++                    defaultMessage: 'Toggle Collection Types'
++                })
+             })
+         ]
+     });
+diff --git a/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.mjs b/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.mjs
+index 1b609bf..c5e91cf 100644
+--- a/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.mjs
++++ b/node_modules/@strapi/content-manager/dist/admin/components/LeftMenu.mjs
+@@ -1,7 +1,7 @@
+ import { jsxs, jsx } from 'react/jsx-runtime';
+ import * as React from 'react';
+ import { useQueryParams, SubNav } from '@strapi/admin/strapi-admin';
+-import { useFilter, useCollator, Divider, Flex, Searchbar } from '@strapi/design-system';
++import { useFilter, useCollator, Divider, Flex, Searchbar, Button } from '@strapi/design-system';
+ import { stringify, parse } from 'qs';
+ import { useIntl } from 'react-intl';
+ import { useContentTypeSchema } from '../hooks/useContentTypeSchema.mjs';
+@@ -22,42 +22,42 @@ const LeftMenu = ()=>{
+         sensitivity: 'base'
+     });
+     const menu = React.useMemo(()=>[
+-            {
+-                id: 'collectionTypes',
+-                title: formatMessage({
+-                    id: getTranslation('components.LeftMenu.collection-types'),
+-                    defaultMessage: 'Collection Types'
+-                }),
+-                searchable: true,
+-                links: collectionTypeLinks
+-            },
+-            {
+-                id: 'singleTypes',
++        {
++            id: 'collectionTypes',
++            title: formatMessage({
++                id: getTranslation('components.LeftMenu.collection-types'),
++                defaultMessage: 'Collection Types'
++            }),
++            searchable: true,
++            links: collectionTypeLinks
++        },
++        {
++            id: 'singleTypes',
++            title: formatMessage({
++                id: getTranslation('components.LeftMenu.single-types'),
++                defaultMessage: 'Single Types'
++            }),
++            searchable: true,
++            links: singleTypeLinks
++        }
++    ].map((section)=>({
++        ...section,
++        links: section.links/**
++         * Filter by the search value
++         */ .filter((link)=>startsWith(link.title, search.trim()))/**
++         * Sort correctly using the language
++         */ .sort((a, b)=>formatter.compare(a.title, b.title))/**
++         * Apply the formated strings to the links from react-intl
++         */ .map((link)=>{
++            return {
++                ...link,
+                 title: formatMessage({
+-                    id: getTranslation('components.LeftMenu.single-types'),
+-                    defaultMessage: 'Single Types'
+-                }),
+-                searchable: true,
+-                links: singleTypeLinks
+-            }
+-        ].map((section)=>({
+-                ...section,
+-                links: section.links/**
+-           * Filter by the search value
+-           */ .filter((link)=>startsWith(link.title, search.trim()))/**
+-           * Sort correctly using the language
+-           */ .sort((a, b)=>formatter.compare(a.title, b.title))/**
+-           * Apply the formated strings to the links from react-intl
+-           */ .map((link)=>{
+-                    return {
+-                        ...link,
+-                        title: formatMessage({
+-                            id: link.title,
+-                            defaultMessage: link.title
+-                        })
+-                    };
++                    id: link.title,
++                    defaultMessage: link.title
+                 })
+-            })), [
++            };
++        })
++    })), [
+         collectionTypeLinks,
+         search,
+         singleTypeLinks,
+@@ -144,6 +144,33 @@ const LeftMenu = ()=>{
+                         })
+                     }, section.id);
+                 })
++            }),
++            /*#__PURE__*/ jsx(Divider, {
++                background: "neutral150"
++            }),
++            /*#__PURE__*/ jsx(Button, {
++                variant: "tertiary",
++                size: "S",
++                fullWidth: true,
++                style: {
++                    borderRadius: 0,
++                    border: 'none'
++                },
++                onClick: ()=>{
++                    const menuElement = document.getElementById(':rk:');
++                    if (menuElement) {
++                        const liElements = menuElement.getElementsByTagName('li');
++                        const isAnyVisible = Array.from(liElements).some((li)=>li.style.display !== 'none');
++                        for(let i = 0; i < liElements.length; i++){
++                            const li = liElements[i];
++                            li.style.display = isAnyVisible ? 'none' : 'block';
++                        }
++                    }
++                },
++                children: formatMessage({
++                    id: getTranslation('components.LeftMenu.toggle-collection-types'),
++                    defaultMessage: 'Toggle Collection Types'
++                })
+             })
+         ]
+     });
